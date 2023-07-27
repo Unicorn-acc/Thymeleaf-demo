@@ -1,0 +1,109 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html xmlns:th="http://www.thymeleaf.org">
+	<head>
+		<title>emplist</title>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+		<link rel="stylesheet" type="text/css" th:href="@{/css/style.css}" />
+	</head>
+	<body>
+		<div id="wrap">
+			<div id="top_content"> 
+				<div id="header">
+					<div id="rightheader">
+						<p>
+							2009/11/20 
+							<br />
+							<a th:href="@{/user/logout}">安全退出</a>
+						</p>
+					</div>
+					<div id="topheader">
+						<h1 id="title">
+							<a href="#">main</a>
+						</h1>
+					</div>
+					<div id="navigation">
+					</div>
+				</div>
+				<div id="content">
+					<p id="whereami">
+					</p>
+					<h1>
+						欢迎 <span th:if="${session.user!=null}" th:text="${session.user.username}"></span>
+						<span th:if="${session.user==null}" >游客</span>!
+					</h1>
+					<table class="table">
+						<tr class="table_header">
+							<td>
+								编号
+							</td>
+							<td>
+								姓名
+							</td>
+							<td>
+								头像
+							</td>
+							<td>
+								工资
+							</td>
+							<td>
+								生日
+							</td>
+							<td>
+								操作
+							</td>
+						</tr>
+<!--						变量名，状态-->
+						<tr th:each="employee, state:${employeeList}" class="row1">
+							<td>
+								<span th:text="${employee.id}"></span>
+							</td>
+							<td>
+								<span th:text="${employee.name}"></span>
+							</td>
+							<td>
+								<img th:src="@{/} + ${employee.photo}" width="60">
+							</td>
+							<td>
+								<span th:text="${employee.salary}"></span>
+							</td>
+							<td>
+								<span th:text="${#dates.format(employee.birthday,'yyyy/MM/dd')}"></span>
+							</td>
+							<td>
+								<a href="javascript:;" th:onclick="'deleteEmployee('+${employee.id}+')'">删除</a>
+<!--								通过路径传参数/employee/detail?id=3-->
+<!--								写法：th:href="@{/employee/detail(id=${employee.id})}-->
+<!--								传多个参数？-->
+<!--								th:href="@{/employee/detail(id=${employee.id}), name=${employee.name}-->
+								<a th:href="@{/employee/detail(id=${employee.id})}">更新</a>
+							</td>
+						</tr>
+
+					</table>
+					<p>
+						<input type="button" class="button" value="添加" onclick="addEmp()"/>
+					</p>
+				</div>
+			</div>
+			<div id="footer">
+				<div id="footer_bg">
+				ABC@126.com
+				</div>
+			</div>
+		</div>
+
+		<script>
+			function addEmp(){
+				location.href = '[[@{/addEmp}]]';
+			}
+
+			function deleteEmployee(id){
+				console.log(id);
+				if(window.confirm('确定要删除这条记录吗?')){
+					location.href='[[@{/employee/delete?id=}]]'+id;
+				}
+			}
+		</script>
+
+	</body>
+</html>
